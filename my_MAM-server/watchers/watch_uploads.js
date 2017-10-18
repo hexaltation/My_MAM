@@ -63,13 +63,13 @@ function checkEnd(path, prev) {
                             //console.log("metadata inserted for "+filename);
                             exec('ffmpeg -i '+path+' -vf "select=gte(n\\,'+thumb_pos+')" -vframes 1 '+thumbs+filename+'.png', (error, stdout, stderr) => {
                             if (error) {
-                                //console.error(`exec error: ${error}`);
+                                console.error(`exec error: ${error}`);
                                 return;
                             }
                             //console.log(`stdout: ${stdout}`);
                             //console.log(`stderr: ${stderr}`);
                             //console.log("Thumbnail created")
-                            exec('ffmpeg -i '+path+' -c:v libx264 -preset slow -crf 22 '+proxys+filename+'_prox.avi', (error, stdout, stderr) => {
+                            exec('ffmpeg -y -i '+path+' -c:v libx264 -preset veryfast -crf 0 -pix_fmt yuv420p -c:a aac -b:a 128k -strict -2 '+proxys+filename+'.mp4', (error, stdout, stderr) => {
                                 //console.log(`stdout: ${stdout}`);
                                 //console.log(`stderr: ${stderr}`);
                                 //console.log("Proxy created");

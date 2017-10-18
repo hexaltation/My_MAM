@@ -18,12 +18,17 @@ router.post('/', function(req, res){
     //console.log(__dirname+'/');
     //console.log(req.file);
     var file = req.file;
+    if (file === undefined){
+      res.render('index', {title: "Test"});
+      return;
+    }
     var filename = file.filename;
     var originalname = file.originalname;
     var mimetype = file.mimetype;
     var encodingtype = file.encodingtype;
     var size = file.size;
     var metadata = "undefined";
+
 
     var media = new Media({ filename: filename,
                             originalname: originalname,
@@ -35,10 +40,12 @@ router.post('/', function(req, res){
         media.save((err, createdMediaObject) => {  
             if (err) {
                 res.status(404).json(err);
+                return;
             }
             else{
                 //console.log("media created in db:", createdMediaObject);
                 res.render('index', {title: "file uploaded with success"});
+                return;
             }
         });
   }) 

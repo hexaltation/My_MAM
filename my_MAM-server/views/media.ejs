@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link href="//vjs.zencdn.net/5.19/video-js.min.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/5.19/video.min.js"></script>
+  </head>
+  <body>
+    <div class="general">
+    <div class="title">
+      <h1><%= title %></h1>
+    </div>
+    <div class="instructions">
+      <p>Welcome to list of medias</p>
+      <p>To play a clip, click on is thumbnail or on &lt;click here&gt; area</p>
+    </div>
+    <% if (medias.length>0) { %>
+    <form action="/media" method="POST" id="list-form">
+      <div class="table">
+        <% for(var i=0; i<3; i++) {%>
+            <div class="row">
+              <% for(var j=i*4; j<(i*4+4); j++) {%>
+                <% if (j<medias.length) { %>
+                  <div class="cell">
+                    <div class="media-name"><%= medias[j].originalname %>
+                    <input id="checkBox" type="checkbox" name="<%= medias[j].filename %>"><br></div>
+                    <img class="bg-img" id= "<%= medias[j].filename %>" src="/src/Thumbnails/<%= medias[j].filename %>.png" alt="<click here>">
+                  </div>
+                <% } %>
+              <% } %>
+            </div> 
+        <% } %>
+      </div>
+      <div class="table-buttons">
+        <input type="submit" value="Download Selected" id="submit-form">
+      </div>
+    </form>
+    <% } %>  
+    <video
+        id="my-player"
+        class="video-js"
+        controls
+        preload="none"
+        poster="/player/default.png"
+        data-setup='{}'>
+      <source id="video_asset" src="/player/default.mp4" type="video/mp4"></source>
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a href="http://videojs.com/html5-video-support/" target="_blank">
+          supports HTML5 video
+        </a>
+      </p>
+    </video>
+    <div class="navbar">
+      <a href='/' style="float:left">index</a>
+    </div>
+    <div class="project">project</div>
+    <div class="project-buttons">project buttons</div>
+    <div class="alert">implement alert</div>
+    <div class="footer">footer</div>
+    </div>
+    <script type="text/javascript" src="/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/media_selector.js"></script>
+  </body>
+</html>
+

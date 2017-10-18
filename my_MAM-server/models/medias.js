@@ -11,4 +11,4 @@ var MediaSchema = mongoose.Schema({
     metadata: {type: String}
 });
 
-exports.medias = mongoose.model('medias', MediaSchema);
+exports.Medias = mongoose.model('medias', MediaSchema);
