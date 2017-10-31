@@ -4,17 +4,15 @@ var ctrl_medias = require('../controllers/ctrl_medias');
 
 
 /* GET medias listing. */
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     ctrl_medias.mediasReadAll(res);
 });
 
 /* POST media downloads. */
-router.post('/', function(req, res) {
-    body = req.body;
-    console.log(body);
-    //res.json(body);
-    //res.download('../my_MAM-src/FullRes/a');
-    ctrl_medias.mediasDownload(res, body);
+router.post('/', (req, res) => {
+    var body = req.body;
+    var media_list = JSON.parse(unescape(body.json));
+    ctrl_medias.mediasDownload(res, media_list);
 });
 
 module.exports = router;

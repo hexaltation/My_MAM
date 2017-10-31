@@ -4,14 +4,16 @@ var Medias = medias.Medias;
 var archiver = require('archiver');
 var fs = require('fs');
 var wait = require('wait.for');
+var js2dir = require('../public/javascripts/json2HLdirectory');
+var sourcepath = __dirname + '/../../my_MAM-src/FullRes';
+var destpath = __dirname + '/../../my_MAM-temp';
 
 function mediasReadAll(res){
-    var output;
-    Medias.find({}, function(err, doc){
+    Medias.find({}, (err, doc) => {
         if(err){
             res.render('media', {title: "Test", medias: [], error: "An error occured"})
         }
-        else if(doc == undefined){
+        else if(doc === undefined){
             res.render('media', {title: "Test", medias: [], error: "No media available"})
         }
         else{
@@ -22,45 +24,41 @@ function mediasReadAll(res){
 
 function mediasDownload(res, body){
 
-    // Setup response type
-    
-
-    var filenames = [];
-    for(var key in body) filenames.push(key);
+    var counter = 0;
+    var filenames = js2dir.json2ids(body);
     var datetime = new Date();
-    var zippedFilename = 'my_mam '+datetime+'.zip';
+    var zippedFilename = 'my_mam '+datetime+'.tar';
     res.type('application/zip');
     res.attachment(zippedFilename);
-    var archive = archiver('zip', {zlib: { level: 1 }});
+    var archive = archiver('tar', {zlib: { level: 1 }});
 
     archive.pipe(res);
 
-    Medias.find({filename: {$in:filenames}}, function(err, doc){
+    Medias.find({filename: {$in:filenames}}, (err, doc) => {
         if(err){
             res.render('media', {title: "Test", medias: [], error: "An error occured during download"})
         }
-        else if(doc == undefined){
+        else if(doc === undefined){
             res.render('media', {title: "Test", medias: [], error: "No media available for download"})
         }
         else{
-            //console.log(doc);
+            var assoc={};
             for(var file in doc){
-                //console.log(doc[file]);
-                console.log(doc[file]['filename']);
-                archive.append(fs.createReadStream('../my_MAM-src/FullRes/'+doc[file]['filename']), { name: doc[file]['originalname'] });
+                var media = doc[file];
+                if ('filename' in media && 'originalname' in media) {
+                    assoc[doc[file].filename] = doc[file].originalname;
+                }
             }
+            var tempfolder = js2dir.json2HLdirectory(body, destpath, sourcepath, assoc);
+            archive.directory(tempfolder, false);
             archive.finalize();
+            archive.on('end', () => {
+                counter += 1;
+                js2dir.clearDirectory(tempfolder);
+            })
         }
     })
 }
-
-function finalize(archive, zippedFilename){
-    console.log("Pouette")
-    wait.forMethod(archive, "finalize");
-    console.log("hop")
-    console.log("toto")
-}
-
 
 module.exports = {
     mediasReadAll: mediasReadAll,

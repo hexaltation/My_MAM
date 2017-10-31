@@ -65,7 +65,7 @@ h1{
         "table table project project"
         "table table project project"
         "table table project project"
-        "table table project-buttons project-buttons"
+        "table-buttons table-buttons project-buttons project-buttons"
         "footer footer footer footer";
     height:100%;
 }
@@ -87,26 +87,19 @@ h1{
 
 .alert{
     grid-area: alert;
-    background-color: darkslateblue;
-}
-
-#list-form{
-    grid-area: table;
-    background-color: brown;
+    background-color: lavender;
 }
 
 .table{
+    grid-area: table;
+    overflow-y: scroll;
     position:relative;
-    width: 100%;
-    height : calc(100% - (100% / 9) + 5px);
     display: inline-block;
     background-color: lightcyan;
 }
 
 .table-buttons{
-    position:relative;
-    width: 100%;
-    height : calc(100% / 9 - 5px);
+    grid-area: table-buttons;
     display: inline-block;
     background-color: chartreuse;
 }
@@ -124,6 +117,15 @@ h1{
     background-color: darkgrey;
 }
 
+.project-title{
+    font-weight: bold;
+}
+
+.bin{
+    font-weight: bold;
+    font-style: italic;
+}
+
 .project-buttons{
     grid-area: project-buttons;
     background-color: darkolivegreen;
@@ -132,4 +134,15 @@ h1{
 .footer{
     grid-area: footer;
     background-color: goldenrod;
+    text-align: center;
+}
+
+.deleteButton{
+    float:right;
+    height:20px;
+    width:20px;
+    text-align: center;
+    text-decoration: none;
+    background-color:red;
+    padding:0px;
 }

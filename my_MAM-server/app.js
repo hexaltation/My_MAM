@@ -5,11 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var watcher = require('./watchers/watch_uploads.js').watcher;
+var watcher_uploads = require('./watchers/watch_uploads.js').watcher;
+var watcher_temp = require('./watchers/watch_temp.js').watcher;
 
-var index = require('./routes/index');
+var login = require('./routes/login');
 var media = require('./routes/media');
 var admin = require('./routes/admin');
+var ingest = require('./routes/ingest');
 
 var app = express();
 
@@ -21,25 +23,33 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use ('/src', express.static(path.join(__dirname, '../my_MAM-src')));
+app.use ('/img', express.static(path.join(__dirname, './public/images/')));
 app.use ('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist/')));
 
-app.use('/', index);
+app.use('/', login);
 app.use('/media', media);
 app.use('/admin', admin);
+app.use('/ingest', ingest);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

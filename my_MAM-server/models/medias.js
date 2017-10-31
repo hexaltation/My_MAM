@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var MediaSchema = mongoose.Schema({
-    //_id: {type: ObjectId},
     filename: {type: String, unique: true},
     originalname: {type: String},
     mimetype: {type: String},

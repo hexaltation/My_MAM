@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+  </head>
+  <body>
+    <h1>Register</h1>
+    <p>Add a User</p>
+    <form action="/admin/" method="post" enctype="application/x-www-form-urlencoded">
+        <label for="email">email</label>
+        <input id="email" type="email" name="email" required></input>
+        <br>
+        <label for="password">password</label>
+        <input id="password" type="password" name="password" required></input>
+        <br>
+        <label for="password_confirm">password confirmation</label>
+        <input id="password_confirm" type="password" name="password_confirm" required></input>
+        <br>
+        <label for="role">role</label>
+        <input id="role" type="number" name="role" step="1" value="0" min="0" max="64">
+        <br>
+        <button type="submit">Register</button>
+    </form>
+    <%= alert %>
+  </body>
+</html>
