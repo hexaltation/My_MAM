@@ -31,7 +31,7 @@
                 <% if (j<medias.length) { %>
                     <div class="cell">
                         <div class="media-name">
-                            <%= medias[j].originalname %>
+                            <%= medias[j].originalname %><br>
                             <input class="checkBox" type="checkbox" id="<%= medias[j].filename %>" name="<%= medias[j].originalname %>"><br>
                         </div>
                         <img class="bg-img" id= "<%= medias[j].filename %>" src="/src/Thumbnails/<%= medias[j].filename %>.png" onerror="this.src='/img/default_thumb.png'" alt="<click here>">

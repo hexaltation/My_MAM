@@ -45,8 +45,11 @@ h1{
 .media-name{
     position:relative;
     display: inline-block;
-    width:100%;
     height:calc(138px - (127.19px*0.66));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
 }
 
 .general{
@@ -78,6 +81,7 @@ h1{
 .navbar{
     grid-area: navbar;
     background-color: crimson;
+    font-size: 150%;
 }
 
 .instructions{

@@ -33,6 +33,9 @@ h1{
     height:100%;
     border: 1px solid black;
     text-align: center;
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 }
 
 .bg-img{
