@@ -1,12 +1,12 @@
 var fs            = require('fs');
 var chokidar      = require('chokidar');
-var upload_dir    = require('../config/config').upload_dir;
 var ffprobe       = require('ffprobe');
 var ffprobeStatic = require('ffprobe-static');
 var db = require('../models/db').db
 var medias = require('../models/medias');
 var Media = medias.Medias;
 const { spawn, exec } = require('child_process');
+var upload_dir    = require('../config/config').upload_dir;
 var thumbs = require('../config/config').thumbs;
 var proxys = require('../config/config').proxys;
 var srcs = require('../config/config').srcs;
@@ -17,7 +17,7 @@ var watcher = chokidar.watch(upload_dir, {ignored: /^\./, persistent: true});
 var end_timeout = 30000;
 
 watcher.on('add', function(path) {
-
+    console.log(path);
     fs.stat(path, function (err, stat) {
         // Replace error checking with something appropriate for your app.
         if (err) throw err;

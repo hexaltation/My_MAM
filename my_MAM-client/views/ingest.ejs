@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My_MAM</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+  </head>
+  <body>
+    <div class="general">
+      <div class="title">
+        <h1>Ingest</h1>
+      </div>
+      <div class="instructions">
+        <p>Upload your file</p>
+      </div>
+      <div class="alert">
+            <%= alert %>
+      </div>
+    <div class="navbar">
+            <a href='/media'>medias</a>
+            <a href='/logout'>logout</a>
+    </div>
+    <div class="table">
+    <form action="/ingest" method="post" enctype="multipart/form-data">
+        Upload <input type="file" name="myFile" ><br>
+    <button type="submit">Upload Image</button>
+    </form>
+    </div>
+    <br>
+    <div class="footer">
+            Conception &#x26E9; Hexaltation
+    </div>
+  </div>
+  </body>
+</html>

@@ -3,6 +3,9 @@ var users = require('../models/users');
 var Users = users.Users;
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
+var nJwt = require('njwt');
+var signingKey = require('../config/config').secret;
+var jwt_generator = require('../config/njwt').jwt_generator;
 
 function login(req, res){
     var body = req.body;
@@ -10,17 +13,23 @@ function login(req, res){
     var password = body.password;
     Users.findOne({'email': email}, (err, user) => {
         if (err){
-            res.render('login', {alert: err});
+            res.status(500).json({error: err});
         }
         else if (user === undefined){
-            res.render('login', {alert: "No matching user or password"});
+            res.status(500).json({error: "No matching user or password"});
         }
         else if(bcrypt.compareSync(password, user.password)){
-            //res.json("test");
-            res.redirect('/media');
-        }
+            token = jwt_generator(user._id, user.role);
+            res.status(200).json({  status:200,
+                                    msg: "user connected",
+                                    token: token,
+                                    user: { id: user._id,
+                                            email: user.email,
+                                            role: user.role }
+                                    });
+    }
         else{
-            res.render('login', {alert: "No matching user or password"});
+            res.status(500).json({error: "No matching user or password"});
         }
     })    
 }
@@ -33,10 +42,10 @@ function register(req, res){
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var check_mail = re.test(email);
     if (!check_mail){
-        res.render('admin', {alert: "invalid email, must be a valid mail"});
+        res.status(500).json({error: "invalid email, must be a valid mail"});
     }
     if (password !== password_confirm){
-        res.render('admin', {alert: "password must match password_confirm"});
+        res.status(500).json({error: "password must match password_confirm"});
     }
     else{
         var salt = bcrypt.genSaltSync(10);
@@ -48,15 +57,15 @@ function register(req, res){
         var user = new Users(body);
         user.save((err) => {  
             if (err) {
-                res.render('admin', {alert: err})
+                res.status(500).json({error: err})
             }
             else{
-                res.render('admin', {alert: "user created"});
+                res.status(200).json({success: "user created"});
             }
         });
     }
     else{
-        res.render('admin', {alert: "invalid request"});
+        res.status(500).json({error: "invalid request"});
     }
 }
 

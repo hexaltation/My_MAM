@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var watcher_uploads = require('./watchers/watch_uploads.js').watcher;
 
 var login = require('./routes/login');
 var media = require('./routes/media');
@@ -36,6 +35,7 @@ app.use ('/img', express.static(path.join(__dirname, './public/images/')));
 app.use ('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist/')));
 
 app.use('/', login);
+app.use('/logout', login);
 app.use('/media', media);
 app.use('/admin', admin);
 app.use('/ingest', ingest);
@@ -55,7 +55,7 @@ app.use((err, req, res) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({error: err.message});
 });
 
 module.exports = app;

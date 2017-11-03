@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My_MAM</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+  </head>
+  <body>
+    <div class="general">
+    <div class="title">
+        <h1>Register</h1>
+    </div>
+    <div class="instructions">
+        <p>Add a User</p>
+    </div>
+    <div class="navbar">
+            <a href='/ingest'>ingest</a>
+            <a href='/media'>medias</a>
+            <a href='/logout'>logout</a>
+        </div>
+    <div class="alert">
+            <%= alert %>
+    </div>
+    <div class="table">
+    <form action="/admin/" method="post" enctype="application/x-www-form-urlencoded">
+        <label for="email">email</label>
+        <input id="email" type="email" name="email" required></input>
+        <br>
+        <label for="password">password</label>
+        <input id="password" type="password" name="password" required></input>
+        <br>
+        <label for="password_confirm">password confirmation</label>
+        <input id="password_confirm" type="password" name="password_confirm" required></input>
+        <br>
+        <label for="role">role</label>
+        <input id="role" type="number" name="role" step="1" value="0" min="0" max="64">
+        <br>
+        <button type="submit">Register</button>
+    </form>
+    </div>
+    <div class="footer">
+            Conception &#x26E9; Hexaltation
+    </div>
+    </div>
+  </body>
+</html>

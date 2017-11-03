@@ -7,11 +7,12 @@ var signingKey = secret; // Create a highly random byte array of 256 bytes
 var claims = {
   iss: "http://localhost:3000/",  // The URL of your service
   sub: undefined,    // The UID of the user in your system
-  scope: "self"
+  scope: undefined
 }
 
-exports.jwt_generator = function(uid){
+exports.jwt_generator = function(uid, role){
                             claims.sub  = uid;
+                            claims.scope = role;
                             var jwt = nJwt.create(claims, signingKey);
                             return jwt.compact();}
 
