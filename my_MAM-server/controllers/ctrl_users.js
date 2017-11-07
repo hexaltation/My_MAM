@@ -19,7 +19,7 @@ function login(req, res){
             res.status(500).json({error: "No matching user or password"});
         }
         else if(bcrypt.compareSync(password, user.password)){
-            token = jwt_generator(user._id, user.role);
+            var token = jwt_generator(user._id, user.role);
             res.status(200).json({  status:200,
                                     msg: "user connected",
                                     token: token,

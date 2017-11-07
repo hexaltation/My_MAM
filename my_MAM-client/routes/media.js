@@ -36,15 +36,15 @@ router.get('/', (req, res) => {
             bodyChunks.push(chunk);
         }).on('end', function() {
             var response_body = Buffer.concat(bodyChunks);
-            var doc = JSON.parse(response_body);
-            if (doc.bad_token){
+            var response_parse = JSON.parse(response_body);
+            if (response_parse.bad_token){
                 res.redirect('/');
             }
-            else if (doc.error){
-                res.render('media', {alert: doc.error, medias: {}});
+            else if (response_parse.error){
+                res.render('media', {alert: response_parse.error, medias: {}, role:-1});
             }
             else{
-                res.render('media', {alert: "", medias: doc});
+                res.render('media', {alert: "", medias: response_parse.medias, role: response_parse.role});
             }
             // ...and/or process the entire body here.
         })
@@ -90,14 +90,15 @@ router.post('/', (req, res) => {
             bodyChunks.push(chunk);
         }).on('end', function() {
             var response_body = Buffer.concat(bodyChunks);
-            var doc = JSON.parse(response_body);
-            if (doc.bad_token){
+            var response_parse = JSON.parse(response_body);
+            if (response_parse.bad_token){
                 res.redirect('/');
             }
-            else if (doc.error){
-                res.render('media', {alert: doc.error, medias: ""});
+            else if (response_parse.error){
+                res.render('media', {alert: response_parse.error, medias: "", role:-1});
             }
             else{
+                var doc = response_parse.medias;
                 res.type('application/zip');
                 res.attachment(zippedFilename);
                 var archive = archiver('tar', {zlib: { level: 1 }});
@@ -126,6 +127,54 @@ router.post('/', (req, res) => {
     });
 
     request.write(JSON.stringify(filenames));
+
+    request.end();
+});
+
+/* DELETE media*/
+router.post('/delete/:id', (req, res) => {
+    var token = req.cookies.token;
+    var id = req.params.id;
+    if (token === undefined){
+        res.redirect('/');
+    }
+    var options = {
+        host: 'localhost',
+        port: '3000',
+        path: '/media/'+id,
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization':token
+        }
+    }
+
+    var request = http.request(options, function(response) {
+
+        // Buffer the body entirely for processing as a whole.
+        var bodyChunks = [];
+        response.on('data', function(chunk) {
+            // You can process streamed parts here...
+            bodyChunks.push(chunk);
+        }).on('end', function() {
+            var response_body = Buffer.concat(bodyChunks);
+            var response_parse = JSON.parse(response_body);
+            if (response_parse.bad_token){
+                res.redirect('/');
+            }
+            else if (response_parse.error){
+                res.render('media', {alert: response_parse.error, medias: "", role:-1});
+            }
+            else{
+                res.redirect('/media');
+            }
+            // ...and/or process the entire body here.
+        })
+    });
+
+    request.on('error', function(e) {
+        logger.log('error', e.message);
+    });
 
     request.end();
 });

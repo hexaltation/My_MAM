@@ -1,7 +1,15 @@
-var project = {type: 'project'};
+var project;
 var binselected = 0;
 var uid = 0;
 
+if (Cookies.get('project')){
+    project = JSON.parse(Cookies.get('project'));
+    Cookies.set('project', project, {maxAge: 300000});
+}
+else{
+    project = {type: 'project'};
+    Cookies.set('project', project, {maxAge: 300000});
+}
 /**
  * Set a deep property on nested objects
  * @param  {object}   obj  A object
@@ -26,6 +34,55 @@ function deleteInProject(json, key_to_skip) {
         }
     });    
 }
+
+function reconstructProject(project, parent_id=undefined){
+    for (var key in project){
+        var projectkey = project[key];
+        if(typeof projectkey === 'object'){
+            var uid = projectkey['uid'];
+            var path = projectkey['path'];
+            var name = projectkey['name'];
+            var level = projectkey['level'];
+            var indent = String(level * 10);
+            if (projectkey['type'] === 'file'){
+                if (level === 0){
+                $(".project-list").append('<dt class="file" level="'+level+'" id="'+uid+'">'+
+                                                '<img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                                '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                            '</dt>');
+                }else{
+                    $("#"+parent_id).after('<dt class="file" level="'+level+'" id="'+uid+'">'+
+                                                '<img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                                '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                            '</dt>');
+                }
+            }
+            else if (projectkey['type'] === 'folder'){
+                if (level === 0){
+                    $(".project-list").append(  '<div>'+
+                                                    '<dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'" path="'+path+'">'+
+                                                        '<img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                                        '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                                    '</dt>'+
+                                                '</div>');
+                }else{
+                    $("#"+parent_id).after(  '<div>'+
+                                                '<dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'" path="'+path+'">'+
+                                                    '<img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                                    '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                                '</dt>'+
+                                            '</div>');
+                }
+                level += 1;
+                reconstructProject(projectkey, uid);
+            }
+        }
+    }
+};
+
+$( document ).ready(function(){
+    reconstructProject(project);
+});
 
 $( document ).ready(function(){
     $("img").click(function(){
@@ -69,20 +126,31 @@ $( document ).ready(function(){
             }
             if (path === undefined){
                 if (name !==""){
-                    $(".project-list").append('<dt class="file" level="'+level+'"><img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+'<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button></dt>');
-                    project[uid] = {id: id, type:'file'};
+                    $(".project-list").append('<dt class="file" level="'+level+'" id="'+uid+'">'+
+                                            '<img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                            '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                        '</dt>');
+                    project[uid] = {id: id, type:'file', name:name, level:level, indent:indent, uid:uid};
                     uid += 1;
                 }
             }
             else{
                 path += "."+uid;
                 if (name !==""){
-                    $(".selected").after('<dt class="file" level="'+level+'"><img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+'<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button></dt>');
-                    setDeepVal(project, path, {id: id, type:'file'});
+                    $(".selected").after('<dt class="file" level="'+level+'" id="'+uid+'">'+
+                                            '<img src="/img/document.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                            '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                        '</dt>');
+                    setDeepVal(project, path, {id: id, type:'file', name:name, level:level, indent:indent, uid:uid});
                     uid += 1;
                 }
             }
         })
+        $(".checkBox").prop('checked', false);
+        $(".bin").removeAttr("style").removeClass("selected");
+        $("#AddSelected").text('Add to project');
+        binselected -= 1;
+        Cookies.set('project', project, {maxAge: 300000});
     });
 });
 
@@ -101,46 +169,61 @@ $( document ).ready(function(){
         if (path === undefined){
             path = uid;
             if (name !==""){
-                $(".project-list").append('<div><dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'"  path="'+path+'"><img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+'<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button></dt></div>');
-                project[uid]={type:'folder', name:name};
+                $(".project-list").append(  '<div>'+
+                                                '<dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'"  path="'+path+'">'+
+                                                    '<img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                                    '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                                '</dt>'+
+                                            '</div>');
+                project[uid]={type:'folder', name:name, path:path, level:level, indent:indent, uid:uid};
                 uid += 1;
             }
         }
         else{
             path += "."+uid;
             if (name !==""){
-                $(".selected").after('<div><dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'"  path="'+path+'"><img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+'<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button></dt></div>')
-                setDeepVal(project, path, {type:'folder', name:name});
+                $(".selected").after('<div>'+
+                                        '<dt class="bin" level="'+level+'" name="'+name+'" id="'+uid+'"  path="'+path+'">'+
+                                            '<img src="/img/folder.gif" width="15" height="17" style="padding-left:'+indent+'px;">'+name+
+                                            '<button type="button" class="deleteButton" name="'+uid+'">&#10006;</button>'+
+                                        '</dt>'+
+                                    '</div>');
+                setDeepVal(project, path, {type:'folder', name:name, path:path, level:level, indent:indent, uid:uid});
                 uid += 1;
             }
         }
+        Cookies.set('project', project, {maxAge: 300000});
     });
 
     $("#DownloadProject").click(function(){
         var data = JSON.stringify(project);
-        var form = $('<form enctype="application/json" action="/media" method="POST">' + '<input type="hidden" name="json" value="' + escape(data) + '">' + '</form>');
-        $(document.body).append(form)
+        var form = $(   '<form enctype="application/json" action="/media" method="POST">'+
+                            '<input type="hidden" name="json" value="' + escape(data) + '">'+
+                        '</form>');
+        $(document.body).append(form);
         form.submit();
+        $(".project-list").empty();
+        Cookies.remove('project', {path:'/'});
     });
 
     $(".project-list").on('click', '.bin', function(){
         var bin_name = $(this).attr('name');
         if (binselected === 0){
             $(this).css("background-color", "yellow").addClass("selected");
-            $("#AddSelected").prop('value', 'Add to bin '+ bin_name).text('Add to bin '+ bin_name);
+            $("#AddSelected").text('Add to bin '+ bin_name);
             binselected += 1;
         }
         else{
             var color = $(this).css("background-color");
             if(color==="rgb(255, 255, 0)"){
                 $(this).removeAttr("style").removeClass("selected");
-                $("#AddSelected").prop('value', 'Add to bin '+ bin_name).text('Add to project');
+                $("#AddSelected").text('Add to project');
                 binselected -= 1;
             }
             else{
                 $(".bin").removeAttr("style").removeClass("selected");
                 $(this).css("background-color", "yellow").addClass("selected");
-                $("#AddSelected").prop('value', 'Add to bin '+ bin_name).text('Add to bin '+ bin_name);
+                $("#AddSelected").text('Add to bin '+ bin_name);
             }
         }
     });
@@ -148,11 +231,23 @@ $( document ).ready(function(){
     $(".project-list").on('click', '.deleteButton', function(){
         var elem_uid = $(this).prop("name");
         if ($(this).closest('dt').hasClass('bin')){
-            $(this).closest('div').empty().remove();
+            $("#AddSelected").text('Add to project');
+            $(this).closest('div').empty();
         }
         else{
             $(this).closest('dt').remove();
         }
         project = deleteInProject(project, elem_uid);
+        Cookies.set('project', project, {maxAge: 300000}) ;
     });
 });
+
+$( document ).ready(function(){
+    $(".deleteMediaButton").click(function(){
+        const id = $(this).prop("name");
+        const Delform = $(    '<form action="/media/delete/'+id+'" method="POST">'+
+                            '</form>');
+        $(document.body).append(Delform);
+        Delform.submit();
+    })
+})

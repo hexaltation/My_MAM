@@ -13,7 +13,7 @@ var signingKey = require('../config/config').secret;
 router.get('/', (req, res) => {
     var token = req.headers.authorization;
 
-    nJwt.verify(token, signingKey, function(err, verifiedJwt){
+    nJwt.verify(token, signingKey, function(err){
         if(err){
             res.status(403).json({bad_token: err})
             // Token has expired, has been tampered with, etc
@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     var token = req.headers.authorization;
 
-    nJwt.verify(token, signingKey, function(err, verifiedJwt){
+    nJwt.verify(token, signingKey, function(err){
         if(err){
             res.status(403).json({bad_token:err})
             // Token has expired, has been tampered with, etc

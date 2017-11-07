@@ -17,7 +17,6 @@ var watcher = chokidar.watch(upload_dir, {ignored: /^\./, persistent: true});
 var end_timeout = 30000;
 
 watcher.on('add', function(path) {
-    console.log(path);
     fs.stat(path, function (err, stat) {
         // Replace error checking with something appropriate for your app.
         if (err) throw err;

@@ -16,7 +16,7 @@ router.get(['/', '/users'], (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{
@@ -34,7 +34,7 @@ router.post(['/', '/users'], (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{
@@ -52,7 +52,7 @@ router.put(['/', '/users'], (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{
@@ -70,7 +70,7 @@ router.delete(['/', '/users'], (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{
@@ -88,7 +88,7 @@ router.get('/medias', (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{
@@ -106,7 +106,7 @@ router.delete('/medias', (req, res) => {
             res.status(403).json({bad_token:err});
             // Token has expired, has been tampered with, etc
         }
-        else if(verifiedJwt.body.scope != 0){
+        else if(verifiedJwt.body.scope !== 0){
             res.status(403).json({bad_token:"Must be admin"});
         }
         else{

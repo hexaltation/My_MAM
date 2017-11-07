@@ -61,3 +61,10 @@
 {"level":"error","message":"connect ECONNREFUSED 127.0.0.1:3000","timestamp":"2017-11-03T15:28:54.404Z"}
 {"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1509724923714  removed with success","timestamp":"2017-11-03T16:02:13.308Z"}
 {"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1509724971815  removed with success","timestamp":"2017-11-03T16:03:02.502Z"}
+{"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1509743369054  removed with success","timestamp":"2017-11-03T21:09:51.097Z"}
+{"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1509962094535  removed with success","timestamp":"2017-11-06T09:54:55.360Z"}
+{"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1509988667657  removed with success","timestamp":"2017-11-06T17:17:48.873Z"}
+{"level":"error","message":"read ECONNRESET","timestamp":"2017-11-07T13:08:29.694Z"}
+{"level":"error","message":"connect ECONNREFUSED 127.0.0.1:3000","timestamp":"2017-11-07T13:08:59.625Z"}
+{"level":"error","message":"socket hang up","timestamp":"2017-11-07T13:28:27.894Z"}
+{"level":"info","message":"/home/gc/Rendu/my_MAM/my_MAM-client/routes/../../my_MAM-temp/1510061428581  removed with success","timestamp":"2017-11-07T13:30:29.498Z"}

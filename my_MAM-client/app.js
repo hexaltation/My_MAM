@@ -33,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use ('/src', express.static(path.join(__dirname, '../my_MAM-src')));
 app.use ('/img', express.static(path.join(__dirname, './public/images/')));
 app.use ('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist/')));
+app.use ('/js-cookie', express.static(path.join(__dirname, 'node_modules/js-cookie/src/')));
+app.use ('/vjs', express.static(path.join(__dirname, 'node_modules/video.js/dist/')));
 
 app.use('/', login);
 app.use('/logout', login);

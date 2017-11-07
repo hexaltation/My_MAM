@@ -63,6 +63,7 @@ router.post('/', (req, res) => {
 router.get('/logout', (req, res) => {
     //destruct token;
     res.cookie('token', "", {maxAge: -100000000000000000});
+    res.cookie('project', "", {maxAge: -100000000000000000});
     res.redirect('/');
 })
 
