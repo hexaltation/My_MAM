@@ -2,8 +2,9 @@
 A little Media Asset Administrator
 
 Needed folders at root of project:
+- my_MAM-client (Already in repo)
 - my_MAM-db
-- my_MAM-server (All ready in repo)
+- my_MAM-server (Already in repo)
 - my_MAM-src
    - FullRes
    - Proxys
